@@ -21,3 +21,5 @@ metadata.create_all(engine)
 
 df = pd.read_excel('D:\AMD-RYZEN7\Desktop\cs.xlsx', sheet_name='Sheet1', header=0)
 df.to_sql(name='cstest', con = engine, if_exists='append', index=False)
+
+# 중복삭제 mysql - DELETE a FROM cstest a, cstest b WHERE a.NO > b.NO AND a.학수번호 = b.학수번호;
