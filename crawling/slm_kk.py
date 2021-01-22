@@ -17,7 +17,6 @@ driver.implicitly_wait(5)
 driver.get('https://kupis.konkuk.ac.kr/sugang/acd/cour/time/SeoulTimetableInfo.jsp')
 driver.find_element_by_xpath(
     "//select[@name='ltYy']/option[text()='2020']").click()
-
 driver.find_element_by_xpath(
     "//select[@name='openSust']/option[@value='006751']").click()
 driver.find_element_by_xpath(
