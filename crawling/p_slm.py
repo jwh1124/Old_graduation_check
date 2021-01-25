@@ -8,6 +8,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
+
 driver = webdriver.Chrome('/Users/ajj/Downloads/chromedriver')
 driver.implicitly_wait(20)
 # web driver를 통해 브라우저 제어할 수 있게 해줌
@@ -42,3 +43,34 @@ driver.find_element_by_xpath(
 driver.find_element_by_xpath(
     '//*[@id="btnSearch_btn"]').click()
 # 조회 버튼 클릭
+
+el_lectures = driver.find_elements_by_class_name('GLDataRow')
+name = el_lectures.text
+print(name)
+driver.quit()
+# //*[@id= "GridEx"]/div[1]/table/tbody/tr[41]/td[6]/div
+# //*[@id= "GridEx"]/div[1]/table/tbody/tr[47]/td[6]/div
+# //*[@id= "GridEx"]
+# //*[@id = "GridEx"]
+# //*[@id = "rptMain"]/tbody/tr[2]/td/div/div[1]/table/tbody/tr[42]/td[6]/div
+# //*[@id = "rptMain"]/tbody/tr[2]/td/div/div[1]/table/tbody/tr[39]
+# //*[@id = "rptMain"]/tbody/tr[2]/td/div/div[1]/table/tbody/tr[1]
+# //*[@id = "rptMain"]/tbody/tr[2]/td/div/div[1]/table/tbody/tr[2]
+
+
+# majonr_name = ["전자정보통신공학과",
+#                "대양휴머니티칼리지"
+#                ]
+# cursor = conn.cursor()
+# create_table = f'''
+#     CREATE TABLE \"{major_name[0]}\"(
+#         id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+#         class_name VARCHAR(30) NOT NULL,
+#         grade INT NOT NULL,
+#         category VARCHAR(10) NOT NULL,
+#         credit INT NOT NULL
+#     )
+# '''
+# cursor.execute(create_table)
+
+# cursor.execute()
