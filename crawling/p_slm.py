@@ -1,6 +1,6 @@
-from bs4 import BeautifulSoup
 from pprint import pprint
 from selenium import webdriver
+import selenium
 import MySQLdb
 import requests
 import time
@@ -44,18 +44,10 @@ driver.find_element_by_xpath(
     '//*[@id="btnSearch_btn"]').click()
 # 조회 버튼 클릭
 
-el_lectures = driver.find_elements_by_class_name('GLDataRow')
-name = el_lectures.text
-print(name)
-driver.quit()
-# //*[@id= "GridEx"]/div[1]/table/tbody/tr[41]/td[6]/div
-# //*[@id= "GridEx"]/div[1]/table/tbody/tr[47]/td[6]/div
-# //*[@id= "GridEx"]
-# //*[@id = "GridEx"]
-# //*[@id = "rptMain"]/tbody/tr[2]/td/div/div[1]/table/tbody/tr[42]/td[6]/div
-# //*[@id = "rptMain"]/tbody/tr[2]/td/div/div[1]/table/tbody/tr[39]
-# //*[@id = "rptMain"]/tbody/tr[2]/td/div/div[1]/table/tbody/tr[1]
-# //*[@id = "rptMain"]/tbody/tr[2]/td/div/div[1]/table/tbody/tr[2]
+elements = driver.find_elements_by_xpath(
+    '//*[@class="GLBodyMid"]/div/table/tbody//tr/td[6]/div')
+for e in elements:
+    print(e.text)
 
 
 # majonr_name = ["전자정보통신공학과",
