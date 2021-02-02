@@ -3,7 +3,7 @@ var db = mysql.createConnection({
     host:'localhost',
     user:'root',
     password:'simpson5378',
-    database:'opentutorials'
+    database:'db_jjj'
   });
   db.connect();
   module.exports=db;
