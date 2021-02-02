@@ -1,0 +1,24 @@
+extends form_layout
+
+block content
+    
+    html
+       body
+       h1= title
+        .frame
+            .center
+                input(type='text', placeholder='Start typing ...')
+                |     
+                #recommend.invisible
+                    .item
+                        span.text
+                    |         
+                    .item
+                        | Veritatis et 
+                        span.text
+                    |         
+                    .item
+                        | ut aliquid ex 
+                        span.text
+                        |  vero eos
+                      script(type='text/javascript', src='../javascript/form.js')
