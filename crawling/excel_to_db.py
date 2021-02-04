@@ -5,7 +5,7 @@ import pandas as pd
 from sqlalchemy import create_engine
 
 engine = create_engine(
-    "mysql://root:whdwk584859@localhost:3306/sejong", encoding='utf-8-sig')
+    "mysql://root:whdwk584859@localhost:3306/db_jjj", encoding='utf-8-sig')
 
 
 Base = declarative_base()
@@ -20,9 +20,9 @@ Base = declarative_base()
 metadata = Base.metadata
 metadata.create_all(engine)
 
-df = pd.read_excel('lecture_20_2.xlsx',
+df = pd.read_excel('lecture_21_1.xlsx',
                    sheet_name='Class Schedule', header=0)
-df.to_sql(name='lectures', con=engine,
+df.to_sql(name='class_sheet', con=engine,
           if_exists='append', index=False)
 
 # 중복삭제 mysql - DELETE a FROM cstest a, cstest b WHERE a.NO > b.NO AND a.학수번호 = b.학수번호;
