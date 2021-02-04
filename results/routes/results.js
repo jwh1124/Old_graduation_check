@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
-// var db = require('../public/javascripts/db');
+var db = require('../public/javascripts/db');
 
-
-const conditionElectronic = {
+const condition = {
+ 전자정보통신공학과 : {
     
     y2017 : {
         교필 : 11,
@@ -172,13 +172,13 @@ const conditionElectronic = {
 
 
 
-}
-let conditionCommon = {
-    영어졸업인증 : null,
+},
+ 공통인증 : {
+    영어졸업인증 : '인증완료',
     고전독서인증 : null
-}
+},
 
-const conditionEngineering = {
+ 공학인증 : {
     y2017 : {
         전문교양 : 16,
         전문교양_과목 : [
@@ -311,33 +311,57 @@ const conditionEngineering = {
         인증최소이수학점 : 100
     }
 }
+}
+var 총이수학점 = 0;
+var 입학연도 = '';
+var 단과대학 = '';
+var 학과 = '';
 
+router.post('/selected', (req,res) => {
+    var post = req.body;
+    단과대학 = post.단과대학;
+    학과 = post.학과;
+    입학연도 = 'y'+post.입학연도;
+    
 
+    
+    
+    console.log(post);
+    
+    res.redirect('/results/myclass');
+})
 
-
-
-
-
-
-
-
-
-
+router.get('/myclass', (req,res) =>{
+    db.query(`SELECT 교과목명,학점 FROM test WHERE 개설대학=? AND 개설학과전공=? LIMIT 2`,[단과대학,학과], function(err, topic){
+        console.log(topic);
+        console.log(topic[1].교과목명);
+        console.log(topic[1].학점);
+        총이수학점 = topic[1].학점;
+        var html = `
+        <!doctype html>
+        <html>
+        <head>
+            <title>GRADUATION</title>
+            <meta charset="utf-8">
+        </head>
+        <body>
+            <h1><a href="/">Graduation-CHECK</a></h1>
+            <h1><a href="/results">결과</a></h1>
+               
+                
+            
+        </body>
+        </html>
+    `;
+    res.send(html);
+    })
+})
 
 router.get('/', (req,res,next) =>{
+    db.query(`SELECT 교과목명 FROM test WHERE  개설학과전공='전자정보통신공학과' LIMIT 1`, function(err, topic){
+        var name = topic[0].교과목명;
 
-    var list = '<div>';
-    var i = 0;
-    while (i < something.length){
-        list += `
-        <h2>${conditionCommon}</h2>
-        <h4>${conditionCommon.교필[0]}</h4>
-        `
-        i++;
-    }
-    list = list + '</div>';
-
-    var html = `
+        var html = `
         <!doctype html>
         <html>
         <head>
@@ -347,18 +371,20 @@ router.get('/', (req,res,next) =>{
         <body>
             <h1><a href="/">Graduation-CHECK</a></h1>
             <h2>중필 -> 교필, 중선 -> 교선1, 교양 -> 교선2</h2>
-                ${list}
+                ${name}
+                ${입학연도}
+                <div>${총이수학점}</div>
                 <div>
                     <h2>전필</h2>
-                    <h4>15/42</h4>
+                    <h4>${총이수학점}/${condition[학과][입학연도].전필}</h4>
                 </div>
                 <div>
                     <h2>전선</h2>
-                    <h4>15/30</h4>
+                    <h4>15/${condition[학과][입학연도].전선}</h4>
                 </div>
                 <div>
                     <h2>교선1(=중선)</h2>
-                    <h4>10/15</h4>
+                    <h4>10/</h4>
                 </div>
                 <div>
                     <h2>기교</h2>
@@ -378,7 +404,7 @@ router.get('/', (req,res,next) =>{
                 </div>
                 <div>
                     <h2>영어인증</h2>
-                    <h4>미완료</h4>
+                    <h4>${condition.공통인증.영어졸업인증}</h4>
                 </div>
                 <div>
                     <h2>고전독서</h2>
@@ -393,6 +419,20 @@ router.get('/', (req,res,next) =>{
         </html>
     `;
     res.send(html);
+    })
+    // var list = '<div>';
+    // var i = 0;
+    // while (i < something.length){
+    //     list += `
+    //     <h2>${conditionCommon}</h2>
+    //     <h4>${conditionCommon.교필[0]}</h4>
+    //     `
+    //     i++;
+    // }
+    // list = list + '</div>';
+    
+    
    
 });
+
 module.exports = router;
