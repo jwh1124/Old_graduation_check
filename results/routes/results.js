@@ -312,10 +312,12 @@ const condition = {
     }
 }
 }
-var 총이수학점 = 0;
+
 var 입학연도 = '';
 var 단과대학 = '';
 var 학과 = '';
+var 총이수학점 = 0;
+var userClass = [];
 
 router.post('/selected', (req,res) => {
     var post = req.body;
@@ -332,10 +334,12 @@ router.post('/selected', (req,res) => {
 })
 
 router.get('/myclass', (req,res) =>{
-    db.query(`SELECT 교과목명,학점 FROM test WHERE 개설대학=? AND 개설학과전공=? LIMIT 2`,[단과대학,학과], function(err, topic){
-        console.log(topic);
+    db.query(`SELECT * FROM test WHERE 개설대학=? AND 개설학과전공=? LIMIT 2`,[단과대학,학과], function(err, topic){
+
         console.log(topic[1].교과목명);
         console.log(topic[1].학점);
+        console.log(topic[1]['이수\n구분']);
+        console.log(topic[1]['요일 및 강의시간']);
         총이수학점 = topic[1].학점;
         var html = `
         <!doctype html>
@@ -347,7 +351,13 @@ router.get('/myclass', (req,res) =>{
         <body>
             <h1><a href="/">Graduation-CHECK</a></h1>
             <h1><a href="/results">결과</a></h1>
-               
+               ${topic[1].교과목명}
+                <form method="post" action="/results/myclass_process">
+                <p>수강한 과목</p>
+                <label><input type="checkbox" name="교과목명" value="${topic[0].교과목명}"> ${topic[0].교과목명}</label>
+                <label><input type="checkbox" name="교과목명" value="${topic[1].교과목명}"> ${topic[1].교과목명}</label>
+                <p><input type="submit" value="Submit"> <input type="reset" value="Reset"></p>
+                </form>
                 
             
         </body>
@@ -356,10 +366,32 @@ router.get('/myclass', (req,res) =>{
     res.send(html);
     })
 })
+router.post('/myclass_process', (req,res) => {
+    var postClass = req.body
+    console.log(postClass)
+    var i = 0;
+    console.log(Object.values(postClass).length)
+    console.log(Object.values(postClass))
+    console.log(postClass.교과목명)
+    console.log(postClass.교과목명.length)
+    while (i<postClass.교과목명.length){
+        userClass[i] = postClass.교과목명[i];
+        i++;
+    }
+    console.log(userClass)
+    res.redirect('/results');
+})
 
 router.get('/', (req,res,next) =>{
-    db.query(`SELECT 교과목명 FROM test WHERE  개설학과전공='전자정보통신공학과' LIMIT 1`, function(err, topic){
-        var name = topic[0].교과목명;
+
+
+
+
+    db.query(`SELECT * FROM test WHERE  교과목명 IN (?) `,[userClass], function(err, topic){
+        console.log(topic);
+        })
+    
+
 
         var html = `
         <!doctype html>
@@ -371,7 +403,7 @@ router.get('/', (req,res,next) =>{
         <body>
             <h1><a href="/">Graduation-CHECK</a></h1>
             <h2>중필 -> 교필, 중선 -> 교선1, 교양 -> 교선2</h2>
-                ${name}
+               
                 ${입학연도}
                 <div>${총이수학점}</div>
                 <div>
@@ -433,6 +465,6 @@ router.get('/', (req,res,next) =>{
     
     
    
-});
+
 
 module.exports = router;
