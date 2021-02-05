@@ -370,14 +370,17 @@ router.post('/myclass_process', (req,res) => {
     var postClass = req.body
     console.log(postClass)
     var i = 0;
-    console.log(Object.values(postClass).length)
-    console.log(Object.values(postClass))
-    console.log(postClass.교과목명)
-    console.log(postClass.교과목명.length)
-    while (i<postClass.교과목명.length){
-        userClass[i] = postClass.교과목명[i];
-        i++;
+ 
+    console.log(Array.isArray(postClass.교과목명))
+    if (Array.isArray(postClass.교과목명) === true){
+        while (i<postClass.교과목명.length){
+            userClass[i] = postClass.교과목명[i];
+            i++;
+        }
+    } else{
+        userClass[0] = postClass.교과목명
     }
+    
     console.log(userClass)
     res.redirect('/results');
 })
@@ -388,10 +391,10 @@ router.get('/', (req,res,next) =>{
 
 
     db.query(`SELECT * FROM test WHERE  교과목명 IN (?) `,[userClass], function(err, topic){
-        console.log(topic);
+        console.log(topic)
         })
-    
 
+        userClass = []
 
         var html = `
         <!doctype html>
