@@ -316,7 +316,15 @@ const condition = {
 var 입학연도 = '';
 var 단과대학 = '';
 var 학과 = '';
-var 총이수학점 = 0;
+var 학점계산 = {
+    전필: 0,
+    전선: 0,
+    교선1: 0,
+    교선2: 0,
+    기교: 0,
+    교필: 0,
+    이수학점: 0
+};
 var userClass = [];
 
 router.post('/selected', (req,res) => {
@@ -370,7 +378,7 @@ router.post('/myclass_process', (req,res) => {
     var postClass = req.body
     console.log(postClass)
     var i = 0;
- 
+    var k = 0;
     console.log(Array.isArray(postClass.교과목명))
     if (Array.isArray(postClass.교과목명) === true){
         while (i<postClass.교과목명.length){
@@ -380,8 +388,43 @@ router.post('/myclass_process', (req,res) => {
     } else{
         userClass[0] = postClass.교과목명
     }
+
+
+
+
+    db.query(`SELECT * FROM test WHERE  교과목명 IN (?) `,[userClass], function(err, search){
+        while ( k < search.length) {
+            if (search[k]['이수\n구분'] === "전공필수"){
+                학점계산.전필 += search[k].학점
+                학점계산.이수학점 += search[k].학점
+                k ++;
+            } else if (search[k]['이수\n구분'] === "전공선택"){
+                학점계산.전선 += search[k].학점
+                학점계산.이수학점 += search[k].학점
+                k ++;
+            } else if (search[k]['이수\n구분'] === "교양선택(1영역)"){
+                학점계산.교선1 += search[k].학점
+                학점계산.이수학점 += search[k].학점
+                k ++;
+            } else if (search[k]['이수\n구분'] === "교양선택(2영역)"){
+                학점계산.교선2 += search[k].학점
+                학점계산.이수학점 += search[k].학점
+                k ++;
+            } else if (search[k]['이수\n구분'] === "학문기초교양"){
+                학점계산.기교 += search[k].학점
+                학점계산.이수학점 += search[k].학점
+                k ++;
+            } else if (search[k]['이수\n구분'] === "교양필수"){
+                학점계산.교필 += search[k].학점
+                학점계산.이수학점 += search[k].학점
+                k ++;
+            } 
+            }
+        })
+
+
+
     
-    console.log(userClass)
     res.redirect('/results');
 })
 
@@ -390,9 +433,7 @@ router.get('/', (req,res,next) =>{
 
 
 
-    db.query(`SELECT * FROM test WHERE  교과목명 IN (?) `,[userClass], function(err, topic){
-        console.log(topic)
-        })
+ 
 
         userClass = []
 
@@ -408,30 +449,30 @@ router.get('/', (req,res,next) =>{
             <h2>중필 -> 교필, 중선 -> 교선1, 교양 -> 교선2</h2>
                
                 ${입학연도}
-                <div>${총이수학점}</div>
+                <div></div>
                 <div>
                     <h2>전필</h2>
-                    <h4>${총이수학점}/${condition[학과][입학연도].전필}</h4>
+                    <h4>${학점계산.전필}/${condition[학과][입학연도].전필}</h4>
                 </div>
                 <div>
                     <h2>전선</h2>
-                    <h4>15/${condition[학과][입학연도].전선}</h4>
+                    <h4>${학점계산.전선}/${condition[학과][입학연도].전선}</h4>
                 </div>
                 <div>
                     <h2>교선1(=중선)</h2>
-                    <h4>10/</h4>
+                    <h4>${학점계산.교선1}/${condition[학과][입학연도].교선1}</h4>
                 </div>
                 <div>
                     <h2>기교</h2>
-                    <h4>15/18</h4>
+                    <h4>${학점계산.기교}/${condition[학과][입학연도].기교}</h4>
                 </div>
                 <div>
                     <h2>교필</h2>
-                    <h4>15/30</h4>
+                    <h4>${학점계산.교필}/${condition[학과][입학연도].교필}</h4>
                 </div>
                 <div>
                     <h2>이수학점</h2>
-                    <h4>100/130</h4>
+                    <h4>${학점계산.이수학점}/${condition[학과][입학연도].졸업학점}</h4>
                 </div>
                 <div>
                     <h2>봉사시간</h2>
