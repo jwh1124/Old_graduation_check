@@ -29,7 +29,7 @@ router.get('/', function(req, res, next) {
                 ${selectYear};
                </select>
                
-               <select name="단과대학">
+               <select name="단과대학" title>
                <option value = "전자정보공학대학">전자정보공학대학</option>
                </select>
                <select name="학과">

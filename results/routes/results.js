@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var db = require('../public/javascripts/db');
 
+
 const condition = {
  전자정보통신공학과 : {
     
@@ -329,26 +330,18 @@ var userClass = [];
 
 router.post('/selected', (req,res) => {
     var post = req.body;
+    console.log(post)
+    console.log(post)
     단과대학 = post.단과대학;
     학과 = post.학과;
-    입학연도 = 'y'+post.입학연도;
-    
+    입학연도 = 'y'+post.입학연도;   
 
-    
-    
-    console.log(post);
     
     res.redirect('/results/myclass');
 })
 
 router.get('/myclass', (req,res) =>{
     db.query(`SELECT * FROM test WHERE 개설대학=? AND 개설학과전공=? LIMIT 2`,[단과대학,학과], function(err, topic){
-
-        console.log(topic[1].교과목명);
-        console.log(topic[1].학점);
-        console.log(topic[1]['이수\n구분']);
-        console.log(topic[1]['요일 및 강의시간']);
-        총이수학점 = topic[1].학점;
         var html = `
         <!doctype html>
         <html>
@@ -376,10 +369,8 @@ router.get('/myclass', (req,res) =>{
 })
 router.post('/myclass_process', (req,res) => {
     var postClass = req.body
-    console.log(postClass)
     var i = 0;
     var k = 0;
-    console.log(Array.isArray(postClass.교과목명))
     if (Array.isArray(postClass.교과목명) === true){
         while (i<postClass.교과목명.length){
             userClass[i] = postClass.교과목명[i];
@@ -388,10 +379,6 @@ router.post('/myclass_process', (req,res) => {
     } else{
         userClass[0] = postClass.교과목명
     }
-
-
-
-
     db.query(`SELECT * FROM test WHERE  교과목명 IN (?) `,[userClass], function(err, search){
         while ( k < search.length) {
             if (search[k]['이수\n구분'] === "전공필수"){
@@ -429,83 +416,82 @@ router.post('/myclass_process', (req,res) => {
 })
 
 router.get('/', (req,res,next) =>{
+    userClass = []
 
 
+    // var list = '<div>';
+    // var i = 0;
+    // while (i < something.length){
+    //     list += `
+    //     <div>
+    //         <h2>전필</h2>
+    //         <h4>${학점계산.전필}/${condition[학과][입학연도].전필}</h4>
+    //     </div>
+    //     `
+    //     i++;
+    // }
+    // list = list + '</div>';
+    
+    var html = `
+    <!doctype html>
+    <html>
+    <head>
+        <title>GRADUATION</title>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <h1><a href="/">Graduation-CHECK</a></h1>
+        <h2>중필 -> 교필, 중선 -> 교선1, 교양 -> 교선2</h2>
+           
 
-
- 
-
-        userClass = []
-
-        var html = `
-        <!doctype html>
-        <html>
-        <head>
-            <title>GRADUATION</title>
-            <meta charset="utf-8">
-        </head>
-        <body>
-            <h1><a href="/">Graduation-CHECK</a></h1>
-            <h2>중필 -> 교필, 중선 -> 교선1, 교양 -> 교선2</h2>
-               
-                ${입학연도}
-                <div></div>
-                <div>
-                    <h2>전필</h2>
-                    <h4>${학점계산.전필}/${condition[학과][입학연도].전필}</h4>
-                </div>
-                <div>
-                    <h2>전선</h2>
-                    <h4>${학점계산.전선}/${condition[학과][입학연도].전선}</h4>
-                </div>
-                <div>
-                    <h2>교선1(=중선)</h2>
-                    <h4>${학점계산.교선1}/${condition[학과][입학연도].교선1}</h4>
-                </div>
-                <div>
-                    <h2>기교</h2>
-                    <h4>${학점계산.기교}/${condition[학과][입학연도].기교}</h4>
-                </div>
-                <div>
-                    <h2>교필</h2>
-                    <h4>${학점계산.교필}/${condition[학과][입학연도].교필}</h4>
-                </div>
-                <div>
-                    <h2>이수학점</h2>
-                    <h4>${학점계산.이수학점}/${condition[학과][입학연도].졸업학점}</h4>
-                </div>
-                <div>
-                    <h2>봉사시간</h2>
-                    <h4>15/30</h4>
-                </div>
-                <div>
-                    <h2>영어인증</h2>
-                    <h4>${condition.공통인증.영어졸업인증}</h4>
-                </div>
-                <div>
-                    <h2>고전독서</h2>
-                    <h4>동양 동서양 서양 과학사</h4>
-                </div>
-                <div>
-                    <h2>공학인증</h2>
-                    <h4>완료</h4>
-                </div>
-            
+            <div></div>
+            <div>
+                <h2>전필</h2>
+                <h4>${학점계산.전필}/${condition[학과][입학연도].전필}</h4>
+            </div>
+            <div>
+                <h2>전선</h2>
+                <h4>${학점계산.전선}/${condition[학과][입학연도].전선}</h4>
+            </div>
+            <div>
+                <h2>교선1(=중선)</h2>
+                <h4>${학점계산.교선1}/${condition[학과][입학연도].교선1}</h4>
+            </div>
+            <div>
+                <h2>기교</h2>
+                <h4>${학점계산.기교}/${condition[학과][입학연도].기교}</h4>
+            </div>
+            <div>
+                <h2>교필</h2>
+                <h4>${학점계산.교필}/${condition[학과][입학연도].교필}</h4>
+            </div>
+            <div>
+                <h2>이수학점</h2>
+                <h4>${학점계산.이수학점}/${condition[학과][입학연도].졸업학점}</h4>
+            </div>
+            <div>
+                <h2>봉사시간</h2>
+                <h4>15/30</h4>
+            </div>
+            <div>
+                <h2>영어인증</h2>
+                <h4>${condition.공통인증.영어졸업인증}</h4>
+            </div>
+            <div>
+                <h2>고전독서</h2>
+                <h4>동양 동서양 서양 과학사</h4>
+            </div>
+            <div>
+                <h2>공학인증</h2>
+                <h4>완료</h4>
+            </div>
+        
         </body>
         </html>
     `;
     res.send(html);
     })
-    // var list = '<div>';
-    // var i = 0;
-    // while (i < something.length){
-    //     list += `
-    //     <h2>${conditionCommon}</h2>
-    //     <h4>${conditionCommon.교필[0]}</h4>
-    //     `
-    //     i++;
-    // }
-    // list = list + '</div>';
+  
     
     
    
