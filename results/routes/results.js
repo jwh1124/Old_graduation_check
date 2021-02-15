@@ -341,7 +341,9 @@ router.post('/selected', (req,res) => {
 })
 
 router.get('/myclass', (req,res) =>{
-    db.query(`SELECT * FROM test WHERE 개설대학=? AND 개설학과전공=? LIMIT 2`,[단과대학,학과], function(err, topic){
+    db.query(`SELECT * FROM class_sheet WHERE 개설대학=? AND 개설학과전공=? `,[단과대학,학과], function(err, topic){
+        
+
         var html = `
         <!doctype html>
         <html>
@@ -417,8 +419,9 @@ router.post('/myclass_process', (req,res) => {
 
 router.get('/', (req,res,next) =>{
     userClass = []
-
-
+    var i = 0;
+    
+ 
     // var list = '<div>';
     // var i = 0;
     // while (i < something.length){
@@ -490,7 +493,17 @@ router.get('/', (req,res,next) =>{
         </html>
     `;
     res.send(html);
-    })
+    학점계산 = {
+        전필: 0,
+        전선: 0,
+        교선1: 0,
+        교선2: 0,
+        기교: 0,
+        교필: 0,
+        이수학점: 0
+    }
+
+     })
   
     
     
