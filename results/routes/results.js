@@ -335,7 +335,6 @@ router.post('/selected', (req,res) => {
     단과대학 = post.단과대학;
     학과 = post.학과;
     입학연도 = 'y'+post.입학연도;   
-
     
     res.redirect('/results/myclass');
 })

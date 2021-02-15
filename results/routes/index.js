@@ -8,7 +8,6 @@ var db = require('../public/javascripts/db');
 router.get('/', function(req, res, next) {
   var selectYear = '';
   var i = 0;
-  
   var year = [2017, 2018, 2019, 2020, 2021];
   while(i < year.length){
     selectYear += `<option value = "${year[i]}">${year[i]}</option>`
