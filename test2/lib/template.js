@@ -1,5 +1,5 @@
 module.exports = {
-  HTML_search:function(title,form,list){
+  HTML_search: function (title, form, list) {
     return `
     <!doctype html>
     <html>
@@ -25,13 +25,22 @@ module.exports = {
 
     `;
   },
-  HTML_selected:function(title,search,f_list,s_list,t_list,l_list,other,next){
-    return`
+  HTML_selected: function (
+    title,
+    search,
+    f_list,
+    s_list,
+    t_list,
+    l_list,
+    other,
+    next
+  ) {
+    return `
     <!doctype html>
     <html>
     <head>
       <meta charset="utf-8">
-      <link rel="stylesheet" type="text/css" href="./stylesheets/search_style.css">
+      <link rel="stylesheet" type="text/css" href="./stylesheets/select_style.css">
     </head>
     <body>
       <div class="select_box">
@@ -73,6 +82,6 @@ module.exports = {
     </body>
     
     </html>
-    `
-  }
-}
+    `;
+  },
+};
