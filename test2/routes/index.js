@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var template = require("../lib/template.js");
+var form = require("../public/javascripts/form.js");
 var db = require("../public/javascripts/db.js");
 var class_sheet = "";
 var major_class_sheet_1 = [];
@@ -41,7 +42,7 @@ async function major_study_list_2() {
 }
 async function major_study_list_3() {
   await db.query(
-    `SELECT * FROM class_sheet WHERE 개설대학='전자정보공학대학' AND 개설학과전공='전자정보통신공학과' AND 학년='3' `,
+    `SELECT * FROM class_sheet WHERE 개설대학='전자정보공학대학' AND 개설학과전공='전자정보통신공학과' AND 학년='3'`,
     [단과대학, 학과],
     function (err, sheet) {
       major_class_sheet_3 = JSON.parse(JSON.stringify(sheet));
@@ -332,14 +333,20 @@ router.post("/go_to_select", function (req, res) {
 });
 
 router.post("/checked_data", function (req, res) {
-  const set5 = new Set(req.body.LST);
-  const Fifth = [...set5];
 
   console.log(req.body.FST);
   console.log(req.body.SND);
   console.log(req.body.TRD);
   console.log(req.body.FTH);
+
+  if(Array.isArray(req.body.LST) === true){
+  const set5 = new Set(req.body.LST);
+  const Fifth = [...set5];
   console.log(Fifth);
+  }else{
+  console.log(req.body.LST);
+  }
+
   res.redirect(`/`);
 });
 
