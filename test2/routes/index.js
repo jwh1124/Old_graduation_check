@@ -3,10 +3,10 @@ var router = express.Router();
 var template = require('../lib/template.js');
 var db = require ("../public/javascripts/db.js");
 var class_sheet='';
-var major_class_sheet_1='';
-var major_class_sheet_2='';
-var major_class_sheet_3='';
-var major_class_sheet_4='';
+var major_class_sheet_1=[];
+var major_class_sheet_2=[];
+var major_class_sheet_3=[];
+var major_class_sheet_4=[];
 var post_select=[];
 var 입학연도 = '';
 var 단과대학 = '';
@@ -44,7 +44,7 @@ function show_list(length,num){
   i = length.length;
   var list =[];
   for (j =0; j< i; j++){
-  list[j] = class_sheet[j].교과목명;
+  list[j] = length[j].교과목명;
   }
   return list[num];
 }
@@ -53,7 +53,7 @@ function show_major_list_1(length,num){
   i = length.length;
   var list =[];
   for (j =0; j< i; j++){
-  list[j] = major_class_sheet_1[j].교과목명;
+  list[j] = length[j].교과목명;
   }
   return list[num];
 }
@@ -61,7 +61,7 @@ function show_major_list_2(length,num){
   i = length.length;
   var list =[];
   for (j =0; j< i; j++){
-  list[j] = major_class_sheet_2[j].교과목명;
+  list[j] = length[j].교과목명;
   }
   return list[num];
 }
@@ -70,7 +70,7 @@ function show_major_list_3(length,num){
   i = length.length;
   var list =[];
   for (j =0; j< i; j++){
-  list[j] = major_class_sheet_3[j].교과목명;
+  list[j] = length[j].교과목명;
   }
   return list[num];
 }
@@ -79,18 +79,22 @@ function show_major_list_4(length,num){
   i = length.length;
   var list =[];
   for (j =0; j< i; j++){
-  list[j] = major_class_sheet_4[j].교과목명;
+  list[j] = length[j].교과목명;
   }
   return list[num];
 }
 
 function show_major_list_5(length,num){
+  if (Array.isArray(length) === true){
   i = length.length;
   var list =[];
   for (j =0; j< i; j++){
-  list[j] = post_select[j];
+  list[j] = length[j];
   }
   return list[num];
+}else{
+  return length;
+}
 }
 
 
@@ -147,16 +151,19 @@ router.get('/select', function(req, res) {
   major_study_list_2()
   major_study_list_3()
   major_study_list_4()
-  var list1='';
-  var list2='';
-  var list3='';
-  var list4='';
-  var list5='';
+  var list1=[];
+  var list2=[];
+  var list3=[];
+  var list4=[];
+  var list5=[];
   var i=0,j=0,k=0,l=0,a=0;
+
+  
   while(i < major_class_sheet_1.length){
     list1 += `<input type='checkbox' name='FST' value = '${show_major_list_1(major_class_sheet_1,i)}'>${show_major_list_1(major_class_sheet_1,i)}  `
     i++;
   }
+
   while(j < major_class_sheet_2.length){
     list2 += `<input type='checkbox' name='SND' value = '${show_major_list_2(major_class_sheet_2,j)}'>${show_major_list_2(major_class_sheet_2,j)}  `
     j++;
@@ -169,10 +176,14 @@ router.get('/select', function(req, res) {
     list4 += `<input type='checkbox' name='FTH' value = '${show_major_list_4(major_class_sheet_4,l)}'>${show_major_list_4(major_class_sheet_4,l)}  `
     l++;
   }
+if (Array.isArray(post_select) === true){
   while(a < post_select.length){
     list5 += `<input type='checkbox' name='LST' value = '${show_major_list_5(post_select,a)}'checked="checked">${show_major_list_5(post_select,a)}  `
     a++;
   }
+}else{
+  list5 = `<input type='checkbox' name='LST' value = '${show_major_list_5(post_select,a)}'checked="checked">${show_major_list_5(post_select,a)}  `
+}
   var html = template.HTML_selected('과목선택창',
   `
   <form action='/go_to_search' method='post'>
@@ -195,28 +206,32 @@ list5
 `
 <p>
   <input type="submit">
+  <input type="reset"> 
 </p>
 </form>
 `
-,
-`<input type='reset' id='reset' value='Reset' name='reset' onclick="resetForm(this.form);"> `
 );
   res.send(html);
 });
 
 
 router.get('/search', function(req, res) { 
-  var list='';
-  var list2= '';
+  var list=[];
+  var list2= []
   var i=0,a=0;
   while(i < class_sheet.length){
     list += `<input type='checkbox' name='First' value = '${show_list(class_sheet,i)}'>${show_list(class_sheet,i)}<br>`
     i++;
   }
+
+  if (Array.isArray(post_select) === true){
   while(a < post_select.length){
     list2 += `<input type='checkbox' name='First' value = '${show_major_list_5(post_select,a)}'checked="checked">${show_major_list_5(post_select,a)}<br>  `
     a++;
   }
+}else{
+    list2 = `<input type='checkbox' name='First' value = '${show_major_list_5(post_select,a)}'checked="checked">${show_major_list_5(post_select,a)}<br>  `
+}
   var html_s = template.HTML_search('과목검색창',
   `
   <form action='/search_process' method='post'>
@@ -265,7 +280,6 @@ router.post('/checked_data',function(req,res){
   console.log(req.body.TRD);
   console.log(req.body.FTH);
   console.log(req.body.LST);
-  
   res.redirect(`/`);
 })
 

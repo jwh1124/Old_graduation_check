@@ -25,7 +25,7 @@ module.exports = {
 
     `;
   },
-  HTML_selected:function(title,search,f_list,s_list,t_list,l_list,other,next,reset){
+  HTML_selected:function(title,search,f_list,s_list,t_list,l_list,other,next){
     return`
     <!doctype html>
     <html>
@@ -66,8 +66,7 @@ module.exports = {
           <span class="name5">${other}</span>
           </div>
           <br>
-          ${next} ${reset}
-          </div>
+          ${next}
         </div>
       </div>
 
