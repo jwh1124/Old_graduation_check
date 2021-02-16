@@ -10,7 +10,7 @@ from sqlalchemy import Column, String, Integer
 Base = declarative_base()
 
 #class BillRawTest(Base):
- #   __tablename__ = 'cstest'
+ #   __tablename__ = 'full_class_sheet'
  #   __table_args__ = {'extend_existing': True}
  #   bill_id = Column(BIGINT(20), primary_key  = True)
  #   item = Column(String(20))
@@ -22,4 +22,4 @@ metadata.create_all(engine)
 df = pd.read_excel('D:\AMD-RYZEN7\Desktop\cs2.xlsx', sheet_name='Sheet1', header=0)
 df.to_sql(name='full_class_sheet', con = engine, if_exists='append', index=False)
 
-# 중복삭제 mysql - DELETE a FROM cstest a, cstest b WHERE a.NO > b.NO AND a.학수번호 = b.학수번호;
+# 중복삭제 mysql - DELETE a FROM full_class_sheet a, full_class_sheet b WHERE a.NO > b.NO AND a.학수번호 = b.학수번호;

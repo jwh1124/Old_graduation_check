@@ -3,7 +3,7 @@ var router = express.Router();
 var template = require("../lib/template.js");
 var form = require("../public/javascripts/form.js");
 var db = require("../public/javascripts/db.js");
-var class_sheet = "";
+var class_sheet = [];
 var major_class_sheet_1 = [];
 var major_class_sheet_2 = [];
 var major_class_sheet_3 = [];
@@ -25,7 +25,7 @@ async function study_list(req) {
 
 async function major_study_list_1() {
   await db.query(
-    `SELECT * FROM class_sheet WHERE 개설대학='전자정보공학대학' AND 개설학과전공='전자정보통신공학과' AND 학년='1' `,
+    `SELECT * FROM full_class_sheet WHERE 개설대학='전자정보공학대학' AND 개설학과전공='전자정보통신공학과' AND Year='1', DELETE a FROM full_class_sheet a, full_class_sheet b WHERE a.NO > b.NO AND a.학수번호 = b.학수번호 `,
     function (err, sheet) {
       major_class_sheet_1 = JSON.parse(JSON.stringify(sheet));
     }
