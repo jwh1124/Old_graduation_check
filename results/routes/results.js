@@ -340,35 +340,35 @@ router.post('/selected', (req,res) => {
     res.redirect('/results/myclass');
 })
 
-router.get('/myclass', (req,res) =>{
-    db.query(`SELECT * FROM class_sheet WHERE 개설대학=? AND 개설학과전공=? `,[단과대학,학과], function(err, topic){
-        
+// router.get('/myclass', (req,res) =>{
+//     db.query(`SELECT * FROM class_sheet WHERE 개설대학=전자정보공학대학 AND 개설학과전공=전자정보통신공학과 `,[단과대학,학과], function(err, topic){
+//         console.log(topic)
 
-        var html = `
-        <!doctype html>
-        <html>
-        <head>
-            <title>GRADUATION</title>
-            <meta charset="utf-8">
-        </head>
-        <body>
-            <h1><a href="/">Graduation-CHECK</a></h1>
-            <h1><a href="/results">결과</a></h1>
-               ${topic[1].교과목명}
-                <form method="post" action="/results/myclass_process">
-                <p>수강한 과목</p>
-                <label><input type="checkbox" name="교과목명" value="${topic[0].교과목명}"> ${topic[0].교과목명}</label>
-                <label><input type="checkbox" name="교과목명" value="${topic[1].교과목명}"> ${topic[1].교과목명}</label>
-                <p><input type="submit" value="Submit"> <input type="reset" value="Reset"></p>
-                </form>
+//         var html = `
+//         <!doctype html>
+//         <html>
+//         <head>
+//             <title>GRADUATION</title>
+//             <meta charset="utf-8">
+//         </head>
+//         <body>
+//             <h1><a href="/">Graduation-CHECK</a></h1>
+//             <h1><a href="/results">결과</a></h1>
+//                ${topic[1].교과목명}
+//                 <form method="post" action="/results/myclass_process">
+//                 <p>수강한 과목</p>
+//                 <label><input type="checkbox" name="교과목명" value="${topic[0].교과목명}"> ${topic[0].교과목명}</label>
+//                 <label><input type="checkbox" name="교과목명" value="${topic[1].교과목명}"> ${topic[1].교과목명}</label>
+//                 <p><input type="submit" value="Submit"> <input type="reset" value="Reset"></p>
+//                 </form>
                 
             
-        </body>
-        </html>
-    `;
-    res.send(html);
-    })
-})
+//         </body>
+//         </html>
+//     `;
+//     res.send(html);
+//     })
+// })
 router.post('/myclass_process', (req,res) => {
     var postClass = req.body
     var i = 0;
