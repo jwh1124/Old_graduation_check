@@ -25,7 +25,7 @@ module.exports = {
 
     `;
   },
-  HTML_selected:function(title,search,f_list,s_list,t_list,l_list,other,next){
+  HTML_selected:function(title,search,f_list,s_list,t_list,l_list,other,next,reset){
     return`
     <!doctype html>
     <html>
@@ -41,6 +41,7 @@ module.exports = {
         </div>
         <div class="names">
         1학년<br>
+        <form action='/checked_data' method='post'>
         <div style="overflow:auto; width:1000px; height:100%; white-space:nowrap;">
           <span class="name1">${f_list}</span>
           </div>
@@ -65,6 +66,7 @@ module.exports = {
           <span class="name5">${other}</span>
           </div>
           <br>
+          ${next} ${reset}
           </div>
         </div>
       </div>

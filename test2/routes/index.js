@@ -154,23 +154,23 @@ router.get('/select', function(req, res) {
   var list5='';
   var i=0,j=0,k=0,l=0,a=0;
   while(i < major_class_sheet_1.length){
-    list1 += `<input type='checkbox' name='First' value = '${show_major_list_1(major_class_sheet_1,i)}'>${show_major_list_1(major_class_sheet_1,i)}  `
+    list1 += `<input type='checkbox' name='FST' value = '${show_major_list_1(major_class_sheet_1,i)}'>${show_major_list_1(major_class_sheet_1,i)}  `
     i++;
   }
   while(j < major_class_sheet_2.length){
-    list2 += `<input type='checkbox' name='First' value = '${show_major_list_2(major_class_sheet_2,j)}'>${show_major_list_2(major_class_sheet_2,j)}  `
+    list2 += `<input type='checkbox' name='SND' value = '${show_major_list_2(major_class_sheet_2,j)}'>${show_major_list_2(major_class_sheet_2,j)}  `
     j++;
   }
   while(k < major_class_sheet_3.length){
-    list3 += `<input type='checkbox' name='First' value = '${show_major_list_3(major_class_sheet_3,k)}'>${show_major_list_3(major_class_sheet_3,k)}  `
+    list3 += `<input type='checkbox' name='TRD' value = '${show_major_list_3(major_class_sheet_3,k)}'>${show_major_list_3(major_class_sheet_3,k)}  `
     k++;
   }
   while(l < major_class_sheet_4.length){
-    list4 += `<input type='checkbox' name='First' value = '${show_major_list_4(major_class_sheet_4,l)}'>${show_major_list_4(major_class_sheet_4,l)}  `
+    list4 += `<input type='checkbox' name='FTH' value = '${show_major_list_4(major_class_sheet_4,l)}'>${show_major_list_4(major_class_sheet_4,l)}  `
     l++;
   }
   while(a < post_select.length){
-    list5 += `<input type='checkbox' name='First' value = '${show_major_list_5(post_select,a)}'>${show_major_list_5(post_select,a)}  `
+    list5 += `<input type='checkbox' name='LST' value = '${show_major_list_5(post_select,a)}'checked="checked">${show_major_list_5(post_select,a)}  `
     a++;
   }
   var html = template.HTML_selected('과목선택창',
@@ -191,6 +191,15 @@ list3
 list4
 ,
 list5
+,  
+`
+<p>
+  <input type="submit">
+</p>
+</form>
+`
+,
+`<input type='reset' id='reset' value='Reset' name='reset' onclick="resetForm(this.form);"> `
 );
   res.send(html);
 });
@@ -249,6 +258,17 @@ router.post('/go_to_search',function(req,res){
 router.post('/go_to_select',function(req,res){
   res.redirect(`/select`);
 })
+
+router.post('/checked_data',function(req,res){
+  console.log(req.body.FST);
+  console.log(req.body.SND);
+  console.log(req.body.TRD);
+  console.log(req.body.FTH);
+  console.log(req.body.LST);
+  
+  res.redirect(`/`);
+})
+
 
 
 
