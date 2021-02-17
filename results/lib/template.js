@@ -41,7 +41,7 @@ module.exports = {
         </div>
         <div class="names">
         1학년<br>
-        <form action='/checked_data' method='post'>
+        <form action='/results_process' method='post'>
         <div style="overflow:auto; width:1000px; height:100%; white-space:nowrap;">
           <span class="name1">${f_list}</span>
           </div>
