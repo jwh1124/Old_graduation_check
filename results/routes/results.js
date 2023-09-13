@@ -339,86 +339,151 @@ router.post('/selected', (req,res) => {
     res.redirect('/results/myclass');
 })
 
-router.get('/myclass', (req,res) =>{
-    db.query(`SELECT * FROM class_sheet WHERE 개설대학=? AND 개설학과전공=? `,[단과대학,학과], function(err, topic){
-        
+// router.get('/myclass', (req,res) =>{
+//     db.query(`SELECT * FROM class_sheet WHERE 개설대학=전자정보공학대학 AND 개설학과전공=전자정보통신공학과 `,[단과대학,학과], function(err, topic){
+//         console.log(topic)
 
-        var html = `
-        <!doctype html>
-        <html>
-        <head>
-            <title>GRADUATION</title>
-            <meta charset="utf-8">
-        </head>
-        <body>
-            <h1><a href="/">Graduation-CHECK</a></h1>
-            <h1><a href="/results">결과</a></h1>
-               ${topic[1].교과목명}
-                <form method="post" action="/results/myclass_process">
-                <p>수강한 과목</p>
-                <label><input type="checkbox" name="교과목명" value="${topic[0].교과목명}"> ${topic[0].교과목명}</label>
-                <label><input type="checkbox" name="교과목명" value="${topic[1].교과목명}"> ${topic[1].교과목명}</label>
-                <p><input type="submit" value="Submit"> <input type="reset" value="Reset"></p>
-                </form>
+//         var html = `
+//         <!doctype html>
+//         <html>
+//         <head>
+//             <title>GRADUATION</title>
+//             <meta charset="utf-8">
+//         </head>
+//         <body>
+//             <h1><a href="/">Graduation-CHECK</a></h1>
+//             <h1><a href="/results">결과</a></h1>
+//                ${topic[1].교과목명}
+//                 <form method="post" action="/results/myclass_process">
+//                 <p>수강한 과목</p>
+//                 <label><input type="checkbox" name="교과목명" value="${topic[0].교과목명}"> ${topic[0].교과목명}</label>
+//                 <label><input type="checkbox" name="교과목명" value="${topic[1].교과목명}"> ${topic[1].교과목명}</label>
+//                 <p><input type="submit" value="Submit"> <input type="reset" value="Reset"></p>
+//                 </form>
                 
             
-        </body>
-        </html>
-    `;
-    res.send(html);
-    })
-})
+//         </body>
+//         </html>
+//     `;
+//     res.send(html);
+//     })
+// })
 router.post('/myclass_process', (req,res) => {
-    var postClass = req.body
-    var i = 0;
-    var k = 0;
-    if (Array.isArray(postClass.교과목명) === true){
-        while (i<postClass.교과목명.length){
-            userClass[i] = postClass.교과목명[i];
+    // if (Array.isArray(postClass.교과목명) === true){
+    //     while (i<postClass.교과목명.length){
+    //         userClass[i] = postClass.교과목명[i];
+    //         i++;
+    //     }
+    // } else{
+    //     userClass[0] = postClass.교과목명
+    // }
+    var i=0,j=0,k=0,l=0,a=0,b=0,c=0;
+    
+  console.log(req.body.FST);
+  console.log(req.body.SND);
+  console.log(req.body.TRD);
+  console.log(req.body.TRD[0]);
+  console.log(req.body.TRD[1]);
+  console.log(req.body.TRD.length);
+  console.log(req.body.FTH);
+  console.log(req.body.LST);  
+
+
+    if (Array.isArray(req.body.FST) === true){
+        while (i<req.body.FST.length){
+            userClass[c] = req.body.FST[i];
             i++;
+            c++;
         }
+      } else{
+        userClass.push(req.body.FST)
+        c++;
+      }
+      
+    if (Array.isArray(req.body.SND) === true){
+      while (j<req.body.SND.length){
+          userClass[c] = req.body.SND[j];
+          j++;
+          c++;
+      }
     } else{
-        userClass[0] = postClass.교과목명
+      userClass.push(req.body.SND)
+      c++;
     }
+  
+    if (Array.isArray(req.body.TRD) === true){
+      while (k<req.body.TRD.length){
+          userClass[c] = req.body.TRD[k];
+          k++;
+          c++;
+      }
+    } else{
+      userClass.push(req.body.TRD)
+      c++;
+    }
+  
+    if (Array.isArray(req.body.FTH) === true){
+      while (l<req.body.FTH.length){
+          userClass[c] = req.body.FTH[l];
+          l++;
+          c++;
+      }
+    } else{
+      userClass.push(req.body.FTH)
+      c++;
+    }
+  
+    if (Array.isArray(req.body.LST) === true){
+      while (a<req.body.LST.length){
+          userClass[c] = req.body.LST[a];
+          a++;
+          c++;
+      }
+    } else{
+      userClass.push(req.body.LST)
+      c++;
+    } 
+      console.log(userClass)
     db.query(`SELECT * FROM test WHERE  교과목명 IN (?) `,[userClass], function(err, search){
-        while ( k < search.length) {
-            if (search[k]['이수\n구분'] === "전공필수"){
-                학점계산.전필 += search[k].학점
-                학점계산.이수학점 += search[k].학점
-                k ++;
-            } else if (search[k]['이수\n구분'] === "전공선택"){
-                학점계산.전선 += search[k].학점
-                학점계산.이수학점 += search[k].학점
-                k ++;
-            } else if (search[k]['이수\n구분'] === "교양선택(1영역)"){
-                학점계산.교선1 += search[k].학점
-                학점계산.이수학점 += search[k].학점
-                k ++;
-            } else if (search[k]['이수\n구분'] === "교양선택(2영역)"){
-                학점계산.교선2 += search[k].학점
-                학점계산.이수학점 += search[k].학점
-                k ++;
-            } else if (search[k]['이수\n구분'] === "학문기초교양"){
-                학점계산.기교 += search[k].학점
-                학점계산.이수학점 += search[k].학점
-                k ++;
-            } else if (search[k]['이수\n구분'] === "교양필수"){
-                학점계산.교필 += search[k].학점
-                학점계산.이수학점 += search[k].학점
-                k ++;
+        console.log(search)
+        while ( b < search.length) {
+            if (search[b]['이수\n구분'] === "전공필수"){
+                학점계산.전필 += search[b].학점
+                학점계산.이수학점 += search[b].학점
+                b ++;
+            } else if (search[b]['이수\n구분'] === "전공선택"){
+                학점계산.전선 += search[b].학점
+                학점계산.이수학점 += search[b].학점
+                b ++;
+            } else if (search[b]['이수\n구분'] === "교양선택(1영역)"){
+                학점계산.교선1 += search[b].학점
+                학점계산.이수학점 += search[b].학점
+                b ++;
+            } else if (search[b]['이수\n구분'] === "교양선택(2영역)"){
+                학점계산.교선2 += search[b].학점
+                학점계산.이수학점 += search[b].학점
+                b ++;
+            } else if (search[b]['이수\n구분'] === "학문기초교양"){
+                학점계산.기교 += search[b].학점
+                학점계산.이수학점 += search[b].학점
+                b ++;
+            } else if (search[b]['이수\n구분'] === "교양필수"){
+                학점계산.교필 += search[b].학점
+                학점계산.이수학점 += search[b].학점
+                b ++;
             } 
             }
         })
 
 
-
-    
+    i=0,j=0,k=0,l=0,a=0,b=0,c=0;
+    userClass = []
     res.redirect('/results');
 })
 
 router.get('/', (req,res,next) =>{
-    userClass = []
-    var i = 0;
+    
+
     
  
     // var list = '<div>';
